@@ -1,6 +1,5 @@
 soldierList = []
 main_loop = True
-selected_soldier = ""
 class Soldier:
     def __init__(self, firstname, lastname, age, gender):
         self.firstname = firstname
@@ -49,23 +48,45 @@ while main_loop:
                     for i in soldierList:
                         print(soldierList.index(i), i.get_name(), i.gender, i.age)
                     soldier_select = input("Please enter your selection: ")
+                    tmp = soldierList[soldier_select]
             elif select_choice == "2":
-                edit_loop = True
-                while edit_loop:
-
+                edit_loop_main = True
+                while edit_loop_main:
                     print('''
-                    1) Edit Soldier Name, Age, Gender
-                    2) Edit Soldier APFT Data
+                    1) Edit Soldier Name, Age, Gender.
+                    2) Edit Soldier APFT Data.
                     0) Return
                     ''')
-                    edit_choice = input("Enter Selection: ")
-                    if edit_choice == "1":
+                    edit_choice_main = input("Enter Selection: ")
+                    if edit_choice_main == "1":
+                        edit_loop_info = True
+                        while edit_loop_info:
+                            print('''
+                            1) Edit Soldier Name.
+                            2) Edit Soldier Age.
+                            3) Edit Solder Gender.
+                            0) Return
+                            ''')
+                            edit_choice_info = input("Enter Selection: ")
+                            if edit_choice_info == "1":
 
-                    elif edit_choice == "2":
+                            elif edit_choice_info == "2":
+                                new_age = int(input("Enter new age: "))
+                                tmp.set_age(new_age)
+                            elif edit_choice_info == "3":
 
-                    elif edit_choice == "0":
+                            elif edit_choice_info == "0":
+
+                            else:
+                                print("You've entered an incorrect option {}!".format(edit_choice_info))
+                    elif edit_choice_main == "2":
+                        edit_loop_apft = True
+                        while edit_loop_apft:
+
+
+                    elif edit_choice_main == "0":
                         print("Returning to selection menu!")
-                        edit_loop = False
+                        edit_loop_main = False
 
             elif select_choice == "0":
                 print("Returning to main menu!")
