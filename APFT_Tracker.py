@@ -1,5 +1,4 @@
-soldierNameList = []
-soldierAgeList = []
+soldierList = []
 looping = True
 
 class Soldier:
@@ -34,12 +33,12 @@ while looping:
     ''')
     choice = input("Enter Selection> ")
     if choice == "1":
-        if not soldierNameList:
+        if not soldierList:
             print("There are no soldier records to display!")
         else:
-            for i in soldierNameList:
-                print("Please make selection from list: ")
-                print(soldierNameList.index(i))
+            for i in soldierList:
+                print(i.get_name(), i.gender, i.age)
+
     elif choice == "2":
         print("Showing all records")
     elif choice == "3":
@@ -47,7 +46,7 @@ while looping:
         surname = input("Enter Soldier's last name: ")
         soldierage = input("Enter Soldier's Age: ")
         soldiergender = input("Enter Soldier's Gender: ")
-        Soldier(firstname, surname, soldierage, soldiergender)
+        soldierList.append(Soldier(firstname, surname, soldierage, soldiergender))
         print("Solder, {} {}, age {} {} added to the database!".format(firstname, surname, soldierage, soldiergender))
     elif choice == "0":
         print("Goodbye!")
