@@ -1,6 +1,9 @@
 soldierList = []
 main_loop = True
 tmp = ""
+from metrics import pushup_groups
+#How to call score from dict:
+#pushup_groups[26][5]
 class Soldier:
     def __init__(self, firstname, lastname, age, gender):
         self.firstname = firstname
@@ -31,8 +34,8 @@ while main_loop:
     3) Add a Soldier
     0) Exit Program
     ''')
-    choice = input("Enter Selection> ")
-    if choice == "1":
+    main_choice = input("Enter Selection: ")
+    if main_choice == "1":
         select_loop = True
         while select_loop:
             print('''
@@ -41,7 +44,7 @@ while main_loop:
             2) Edit Selected Soldier Records
             0) Return to Main Menu
             ''')
-            select_choice = input("Enter Selection> ")
+            select_choice = input("Enter Selection: ")
             if select_choice == "1":
                 if not soldierList:
                     print("There are no soldier records to display!")
@@ -94,24 +97,26 @@ while main_loop:
                     elif edit_choice_main == "0":
                         print("Returning to selection menu!")
                         edit_loop_main = False
+                    else:
+                        print("You've entered an incorrect option {}!".format(edit_choice_main))
             elif select_choice == "0":
                 print("Returning to main menu!")
                 select_loop = False
             else:
                 print("You've entered an incorrect option {}!".format(select_choice))
-    elif choice == "2":
+    elif main_choice == "2":
         print("Showing all records")
         for i in soldierList:
             print(soldierList.index(i), i.get_name(), i.gender, i.age)
-    elif choice == "3":
+    elif main_choice == "3":
         firstname = input("Enter Soldier's first name: ")
         surname = input("Enter Soldier's last name: ")
         soldierage = input("Enter Soldier's Age: ")
         soldiergender = input("Enter Soldier's Gender: ")
         soldierList.append(Soldier(firstname, surname, soldierage, soldiergender))
-        print("Solder, {} {}, age {} {} added to the database!".format(firstname, surname, soldierage, soldiergender))
-    elif choice == "0":
+        print("Soldier, {} {}, age {} {} added to the database!".format(firstname, surname, soldierage, soldiergender))
+    elif main_choice == "0":
         print("Goodbye!")
         main_loop = False
     else:
-        print("You've entered a incorrect option {}!".format(choice))
+        print("You've entered a incorrect option {}!".format(main_choice))
