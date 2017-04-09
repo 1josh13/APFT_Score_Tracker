@@ -1,9 +1,9 @@
+from metrics import pushup_groups_male
 soldierList = []
 main_loop = True
 tmp = ""
-from metrics import pushup_groups
 #How to call score from dict:
-#pushup_groups[26][5]
+#pushup_groups_male[26][5]
 class Soldier:
     def __init__(self, firstname, lastname, age, gender):
         self.firstname = firstname
