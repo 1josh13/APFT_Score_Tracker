@@ -24,9 +24,9 @@ class Soldier:
         self.gender = gender
 
 while main_loop:
-    print (''' 
+    print ('''
     Main Menu
-    1) Soldier Selection
+    1) Edit Soldier Records
     2) View All Records
     3) Add a Soldier
     0) Exit Program
@@ -90,11 +90,10 @@ while main_loop:
                     elif edit_choice_main == "2":
                         edit_loop_apft = True
                         #while edit_loop_apft:
-
+                        #Need to design and implement APFT standards / charts.
                     elif edit_choice_main == "0":
                         print("Returning to selection menu!")
                         edit_loop_main = False
-
             elif select_choice == "0":
                 print("Returning to main menu!")
                 select_loop = False
