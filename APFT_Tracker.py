@@ -46,11 +46,9 @@ class Soldier:
 
 def set_age_group(soldierage):
     if soldierage <= 21:
-        age_group = 21
-        return age_group
+        return 21
     elif soldierage <= 26:
-        age_group = 26
-        return age_group
+        return 26
     elif soldierage <= 31:
         age_group = 31
         return age_group
@@ -148,7 +146,7 @@ while main_loop:
                         2 Mile Run: {}
                         
                         Total Score: {} out of 300
-                        '''.format(tmp.get_pushup_score, tmp.get_situp_score, tmp.get_runtime_score, tmp.get_pushup_score + tmp.get_situp_score + tmp.get_runtime_score))
+                        '''.format(tmp.get_pushup_score(), tmp.get_situp_score(), tmp.get_runtime_score(), tmp.get_pushup_score() + tmp.get_situp_score() + tmp.get_runtime_score()))
                     elif apft_loop_choice == "2":
                         pushup_reps = int(input("Enter number of pushups preformed: "))
                         situp_reps = int(input("Enter number of situps preformed: "))
@@ -162,7 +160,7 @@ while main_loop:
                         2 Mile Run: {}
 
                         Total Score:  out of 300
-                        '''.format(tmp.get_pushup_score, tmp.get_situp_score, tmp.get_runtime_score))
+                        '''.format(tmp.get_pushup_score(), tmp.get_situp_score(), tmp.get_runtime_score()))
                     #TODO Edit apft scores.
                     #elif apft_loop_choice == "3":
 
@@ -186,7 +184,16 @@ while main_loop:
         firstname = input("Enter Soldier's first name: ")
         surname = input("Enter Soldier's last name: ")
         soldierage = int(input("Enter Soldier's Age: "))
-        soldiergender = input("Enter Soldier's Gender: ")
+        print("Select Soldier's Gender:")
+        print("1. Male")
+        print("2. Female")
+        soldiergenderstr = int(input("> "))
+        if soldiergenderstr == 1:
+            soldiergender = "Male"
+        elif soldiergenderstr == 2:
+            soldiergender = "Female"
+        else:
+            print("You dun fucked up")
         soldier_age_group = set_age_group(soldierage)
         soldierList.append(Soldier(firstname, surname, soldierage, soldiergender, soldier_age_group))
         print("Soldier, {} {}, age {} {} added to the database!".format(firstname, surname, soldierage, soldiergender))
