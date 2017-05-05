@@ -42,7 +42,14 @@ class Soldier:
     def get_runtime_score(self):
         return self.runtime_score
     def set_runtime_score(self, runtime):
+        keylist = []
+        for key in run_groups_male[self.age_group].keys():
+            keylist.append(key)
+        while keylist.count(runtime) == 0:
+            runtime = runtime + 1
         self.runtime_score = run_groups_male[self.age_group][runtime]
+        #print(runtime_score)
+        #self.runtime_score = run_groups_male[self.age_group][runtime]
 
 def set_age_group(soldierage):
     if soldierage <= 21:
@@ -50,23 +57,17 @@ def set_age_group(soldierage):
     elif soldierage <= 26:
         return 26
     elif soldierage <= 31:
-        age_group = 31
-        return age_group
+        return 31
     elif soldierage <= 36:
-        age_group = 36
-        return age_group
+        return 36
     elif soldierage <= 41:
-        age_group = 41
-        return age_group
+        return 41
     elif soldierage <= 46:
-        age_group = 46
-        return age_group
+        return 46
     elif soldierage <= 51:
-        age_group = 51
-        return age_group
+        return 51
     elif soldierage <= 56:
-        age_group = 56
-        return age_group
+        return 56
     else:
         return False
 
@@ -151,16 +152,18 @@ while main_loop:
                         pushup_reps = int(input("Enter number of pushups preformed: "))
                         situp_reps = int(input("Enter number of situps preformed: "))
                         runtime = input("Enter 2 mile runtime MM:SS: ")
+                        min, sec = runtime.split(':')
+                        run_secs = int(min) * 60 + int(sec)
                         tmp.set_pushup_score(pushup_reps)
                         tmp.set_situp_score(situp_reps)
-                        tmp.set_runtime_score(runtime)
+                        tmp.set_runtime_score(run_secs)
                         print('''
                         Pushups: {}
                         Situps: {}
                         2 Mile Run: {}
 
-                        Total Score:  out of 300
-                        '''.format(tmp.get_pushup_score(), tmp.get_situp_score(), tmp.get_runtime_score()))
+                        Total Score: {} out of 300
+                        '''.format(tmp.get_pushup_score(), tmp.get_situp_score(), tmp.get_runtime_score(), tmp.get_pushup_score() + tmp.get_situp_score() + tmp.get_runtime_score()))
                     #TODO Edit apft scores.
                     #elif apft_loop_choice == "3":
 

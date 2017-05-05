@@ -9,6 +9,10 @@ run_groups_male = {21: {780: 100, 786: 99, 792: 97, 798: 96, 804: 94, 810: 93, 8
 }
 
 '''
+def set_runtime_score(runtime):
+    runtime_score = run_groups_male[self.age_group][runtime]
+'''
+'''
 token = dict()
 for key, value in run_groups_male[56].items():
     min, sec = key.split(':')
@@ -18,4 +22,33 @@ run_groups_male[56] = token
 print(run_groups_male[56])
 '''
 
-print(run_groups_male[56][780])
+userin1 = 780
+userin2 = 818
+keylist = []
+
+for key in run_groups_male[21].keys():
+    keylist.append(key)
+while keylist.count(userin2) == 0:
+    userin2 = userin2 + 1
+
+runtime_score = run_groups_male[21][userin2]
+print(runtime_score)
+
+   # if userin2 != run_groups_male[21].keys():
+      #  userin2 += 1
+       # print(userin2)
+
+    #for key in run_groups_male[21].keys():
+       # while userin2 != run_groups_male[21][userin1]:
+           # userin2 += 1
+           # print(userin2)
+   # runtime_score = run_groups_male[21][userin2]
+   # print(runtime_score)
+
+# print(run_groups_male[56][780])
+
+
+# if userin2 == run_groups_male[21][userin2]:
+    # runtime_score = run_groups_male[21][userin2]
+    # print(runtime_score)
+# else:
