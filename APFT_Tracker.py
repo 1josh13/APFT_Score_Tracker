@@ -6,6 +6,7 @@ main_loop = True
 tmp = ""
 #How to call score from dict:
 #pushup_groups_male[26][5]
+#TODO: Create load and save function in program.
 class Soldier:
     def __init__(self, firstname, lastname, age, gender, age_group):
         self.firstname = firstname
@@ -13,6 +14,7 @@ class Soldier:
         self.age = age
         self.age_group = age_group
         self.gender = gender
+        self.scorelist = []
         self.pushup_score = 0
         self.situp_score = 0
         self.runtime_score = 0
@@ -33,23 +35,23 @@ class Soldier:
         self.gender = gender
     def get_pushup_score(self):
         return self.pushup_score
-    def set_pushup_score(self, pushup_reps):
-        self.pushup_score = pushup_groups_male[self.age_group][pushup_reps]
     def get_situp_score(self):
         return self.situp_score
-    def set_situp_score(self, situp_reps):
-        self.situp_score = situp_groups_unisex[self.age_group][situp_reps]
     def get_runtime_score(self):
         return self.runtime_score
-    def set_runtime_score(self, runtime):
+    def set_scores(self, pushup_reps, situp_reps, runtime, date):
+        self.pushup_score = pushup_groups_male[self.age_group][pushup_reps]
+        self.situp_score = situp_groups_unisex[self.age_group][situp_reps]
         keylist = []
         for key in run_groups_male[self.age_group].keys():
             keylist.append(key)
         while keylist.count(runtime) == 0:
             runtime = runtime + 1
         self.runtime_score = run_groups_male[self.age_group][runtime]
-        #print(runtime_score)
-        #self.runtime_score = run_groups_male[self.age_group][runtime]
+        self.scorelist.append((date, self.pushup_score + self.situp_score + self.runtime_score))
+    def print_scorelist(self):
+        for entry in self.scorelist: # scorelist = [(str, int), (str, int), (str, int)]
+            print("Record Date: {} ------ Total Score: {}".format(entry[0], entry[1]))
 
 def set_age_group(soldierage):
     if soldierage <= 21:
@@ -140,7 +142,9 @@ while main_loop:
                     0) Return to Selection Menu
                     ''')
                     apft_loop_choice = input("Enter Selection: ")
+                    #TODO: Add DATE --- SCORE style printout.
                     if apft_loop_choice == "1":
+                        tmp.print_scorelist()
                         print('''
                         Pushups: {}
                         Situps: {}
@@ -149,14 +153,13 @@ while main_loop:
                         Total Score: {} out of 300
                         '''.format(tmp.get_pushup_score(), tmp.get_situp_score(), tmp.get_runtime_score(), tmp.get_pushup_score() + tmp.get_situp_score() + tmp.get_runtime_score()))
                     elif apft_loop_choice == "2":
+                        date = input("Enter the date of the record to input: MMDDYYY")
                         pushup_reps = int(input("Enter number of pushups preformed: "))
                         situp_reps = int(input("Enter number of situps preformed: "))
                         runtime = input("Enter 2 mile runtime MM:SS: ")
                         min, sec = runtime.split(':')
                         run_secs = int(min) * 60 + int(sec)
-                        tmp.set_pushup_score(pushup_reps)
-                        tmp.set_situp_score(situp_reps)
-                        tmp.set_runtime_score(run_secs)
+                        tmp.set_scores(pushup_reps, situp_reps, run_secs, date)
                         print('''
                         Pushups: {}
                         Situps: {}
