@@ -7,6 +7,25 @@ run_groups_male = {21: {780: 100, 786: 99, 792: 97, 798: 96, 804: 94, 810: 93, 8
                    51: {780: 100, 786: 100, 792: 100, 798: 100, 804: 100, 810: 100, 816: 100, 822: 100, 828: 100, 834: 100, 840: 100, 846: 100, 852: 100, 858: 100, 864: 100, 870: 99, 876: 98, 882: 98, 888: 97, 894: 96, 900: 95, 906: 95, 912: 94, 918: 93, 924: 92, 930: 91, 936: 91, 942: 90, 948: 89, 954: 88, 960: 87, 966: 87, 972: 86, 978: 85, 984: 84, 990: 84, 996: 83, 1002: 82, 1008: 81, 1014: 80, 1020: 80, 1026: 79, 1032: 78, 1038: 77, 1044: 76, 1050: 76, 1056: 75, 1062: 74, 1068: 73, 1074: 73, 1080: 72, 1086: 71, 1092: 70, 1098: 69, 1104: 69, 1110: 68, 1116: 67, 1122: 66, 1128: 65, 1134: 65, 1140: 64, 1146: 63, 1152: 62, 1158: 62, 1164: 61, 1170: 60, 1176: 59, 1182: 58, 1188: 58, 1194: 57, 1200: 56, 1206: 55, 1212: 55, 1218: 54, 1224: 53, 1230: 52, 1236: 51, 1242: 51},
                    56: {780: 100, 786: 100, 792: 100, 798: 100, 804: 100, 810: 100, 816: 100, 822: 100, 828: 100, 834: 100, 840: 100, 846: 100, 852: 100, 858: 100, 864: 100, 870: 100, 876: 100, 882: 100, 888: 99, 894: 98, 900: 98, 906: 97, 912: 96, 918: 95, 924: 95, 930: 94, 936: 93, 942: 92, 948: 91, 954: 91, 960: 90, 966: 89, 972: 88, 978: 87, 984: 87, 990: 86, 996: 85, 1002: 84, 1008: 84, 1014: 83, 1020: 82, 1026: 81, 1032: 80, 1038: 80, 1044: 79, 1050: 78, 1056: 77, 1062: 76, 1068: 76, 1074: 75, 1080: 74, 1086: 73, 1092: 73, 1098: 72, 1104: 71, 1110: 70, 1116: 69, 1122: 69, 1128: 68, 1134: 67, 1140: 66, 1146: 65, 1152: 65, 1158: 64, 1164: 63, 1170: 62, 1176: 62, 1182: 61, 1188: 60, 1194: 59, 1200: 58, 1206: 58, 1212: 57, 1218: 56, 1224: 55, 1230: 55, 1236: 54, 1242: 53}
 }
+homepath = expanduser("~\\Documents\\")
+soldierdatafile = homepath+"soldierdata.txt"
+soldierList = []
+def loaddata(filename):
+    with open(soldierdatafile, 'rb') as input:
+        soldierList.append(pickle.load(input))
+
+def savedata(filename):
+    for i in soldierList:
+        with open(soldierdatafile, 'wb') as output:
+            pickle.dump(soldierList[i], output, pickle.HIGHEST_PROTOCOL)
+
+
+
+
+
+
+
+
 
 '''
 def set_runtime_score(runtime):
@@ -21,7 +40,7 @@ for key, value in run_groups_male[56].items():
 run_groups_male[56] = token
 print(run_groups_male[56])
 '''
-
+'''
 userin1 = 780
 userin2 = 818
 keylist = []
@@ -34,21 +53,61 @@ while keylist.count(userin2) == 0:
 runtime_score = run_groups_male[21][userin2]
 print(runtime_score)
 
-   # if userin2 != run_groups_male[21].keys():
-      #  userin2 += 1
-       # print(userin2)
+    if userin2 != run_groups_male[21].keys():
+    # userin2 += 1
+        print(userin2)
 
-    #for key in run_groups_male[21].keys():
-       # while userin2 != run_groups_male[21][userin1]:
-           # userin2 += 1
-           # print(userin2)
-   # runtime_score = run_groups_male[21][userin2]
-   # print(runtime_score)
+    for key in run_groups_male[21].keys():
+        while userin2 != run_groups_male[21][userin1]:
+            userin2 += 1
+            print(userin2)
+    runtime_score = run_groups_male[21][userin2]
+    print(runtime_score)
 
-# print(run_groups_male[56][780])
+ print(run_groups_male[56][780])
 
 
-# if userin2 == run_groups_male[21][userin2]:
-    # runtime_score = run_groups_male[21][userin2]
-    # print(runtime_score)
-# else:
+ if userin2 == run_groups_male[21][userin2]:
+     runtime_score = run_groups_male[21][userin2]
+     print(runtime_score)
+ else:
+'''
+
+import json
+
+
+class Soldier:
+
+    def __init__(self, firstname, lastname):
+        self.firstname = firstname
+        self.lastname = lastname
+        self.age = 0
+
+    def get_name(self):
+        return self.firstname + ' ' + self.lastname
+
+    @classmethod
+    def from_json(cls, json_string):
+        # here cls is Soldier
+        the_dict = json.loads(json_string)
+        result = Soldier(the_dict['firstname'], the_dict['lastname'])
+        result.age = the_dict['age']
+        return result
+
+    def to_json(self):
+        return json.dumps({
+            'firstname': self.firstname,
+            'lastname': self.lastname,
+            'age': self.age,
+        })
+
+
+# you can read this from a file easily
+soldiers = [
+    Soldier.from_json('{"age": 123, "firstname": "Aku", "lastname": "Li"}'),
+    Soldier.from_json('{"age": 456, "firstname": "Josh", "lastname": "13"}'),
+]
+for s in soldiers:
+    print(s.get_name())
+    print(s.to_json())
+    print()

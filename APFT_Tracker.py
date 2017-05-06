@@ -5,10 +5,8 @@ from metrics import situp_groups_unisex
 from metrics import run_groups_male
 homepath = expanduser("~\\Documents\\")
 soldierdatafile = homepath+"soldierdata.txt"
-soldierList = []
 main_loop = True
 tmp = ""
-
 #TODO: Create load and save function in program.
 class Soldier:
     def __init__(self, firstname, lastname, age, gender, age_group):
@@ -28,6 +26,7 @@ class Soldier:
             self.firstname = firstname
         if self.lastname != lastname:
             self.lastname = lastname
+#TODO: Remove lines 31-44 and check rest of code for issues.
     def get_age(self):
         return self.age
     def set_age(self, age):
@@ -76,24 +75,25 @@ def set_age_group(soldierage):
     else:
         return False
 
-#TODO: Fix loading data. Currently loads everything as one object in list.
 def loaddata(filename):
     with open(soldierdatafile, 'rb') as input:
-        soldierList.append(pickle.load(input))
-
+        print(input)
+        soldier_list = pickle.load(input)
+        return soldier_list
+    #except:
+        #print("No Data in file.")
 def savedata(filename):
     with open(soldierdatafile, 'wb+') as output:
-        for index in soldierList:
-            pickle.dump(index, output, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(soldier_list, output, pickle.HIGHEST_PROTOCOL)
 
-loaddata(soldierdatafile)
+soldier_list = loaddata(soldierdatafile)
 while main_loop:
     print ('''
     Main Menu
     1) Edit Soldier Records
     2) View All Soldier Data
     3) Add a Soldier
-    0) Exit Program
+    0) Exit's Program and Saves Data
     ''')
     main_choice = input("Enter Selection: ")
     if main_choice == "1":
@@ -109,13 +109,13 @@ while main_loop:
             select_choice = input("Enter Selection: ")
             #Prints soldier list and asks for user choice.
             if select_choice == "1":
-                if not soldierList:
+                if not soldier_list:
                     print("There are no soldier records to display!")
                 else:
-                    for i in soldierList:
-                        print(soldierList.index(i), i.get_name(), i.gender, i.age)
+                    for i in soldier_list:
+                        print(soldier_list.index(i), i.get_name(), i.gender, i.age)
                     soldier_select = int(input("Please enter your selection: "))
-                    tmp = soldierList[soldier_select]
+                    tmp = soldier_list[soldier_select]
             #Enter "edit" mode to change selected soldiers attributes.
             elif select_choice == "2":
                 edit_loop_main = True
@@ -145,7 +145,7 @@ while main_loop:
                         edit_loop_main = False
                     else:
                         print("You've entered an incorrect option {}!".format(edit_choice_info))
-            #TODO
+            #TODO: Add ability to edit records.
             elif select_choice == "3":
                 edit_loop_apft = True
                 while edit_loop_apft:
@@ -197,8 +197,8 @@ while main_loop:
     #Shows all soldier data.
     elif main_choice == "2":
         print("Showing all soldier data")
-        for i in soldierList:
-            print(soldierList.index(i), i.get_name(), i.gender, i.age)
+        for i in soldier_list:
+            print(soldier_list.index(i), i.get_name(), i.gender, i.age)
     #Imputs new soldier data into soldier class as an object of the class.
     elif main_choice == "3":
         firstname = input("Enter Soldier's first name: ")
@@ -215,7 +215,7 @@ while main_loop:
         else:
             print("You dun fucked up")
         soldier_age_group = set_age_group(soldierage)
-        soldierList.append(Soldier(firstname, surname, soldierage, soldiergender, soldier_age_group))
+        soldier_list.append(Soldier(firstname, surname, soldierage, soldiergender, soldier_age_group))
         print("Soldier, {} {}, age {} {} added to the database!".format(firstname, surname, soldierage, soldiergender))
     #Exits the program.
     elif main_choice == "0":
