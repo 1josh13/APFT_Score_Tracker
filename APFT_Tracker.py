@@ -1,11 +1,14 @@
+import pickle
+from os.path import expanduser
 from metrics import pushup_groups_male
 from metrics import situp_groups_unisex
 from metrics import run_groups_male
+homepath = expanduser("~\\Documents\\")
+soldierdatafile = homepath+"soldierdata.txt"
 soldierList = []
 main_loop = True
 tmp = ""
-#How to call score from dict:
-#pushup_groups_male[26][5]
+
 #TODO: Create load and save function in program.
 class Soldier:
     def __init__(self, firstname, lastname, age, gender, age_group):
@@ -73,6 +76,17 @@ def set_age_group(soldierage):
     else:
         return False
 
+#TODO: Fix loading data. Currently loads everything as one object in list.
+def loaddata(filename):
+    with open(soldierdatafile, 'rb') as input:
+        soldierList.append(pickle.load(input))
+
+def savedata(filename):
+    with open(soldierdatafile, 'wb+') as output:
+        for index in soldierList:
+            pickle.dump(index, output, pickle.HIGHEST_PROTOCOL)
+
+loaddata(soldierdatafile)
 while main_loop:
     print ('''
     Main Menu
@@ -206,6 +220,7 @@ while main_loop:
     #Exits the program.
     elif main_choice == "0":
         print("Goodbye!")
+        savedata(soldierdatafile)
         main_loop = False
     else:
         print("You've entered a incorrect option: {}!".format(main_choice))
