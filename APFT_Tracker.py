@@ -83,6 +83,9 @@ def loaddata(filename):
             return soldier_list
     except:
         print("No Data in file.")
+        soldier_list = []
+        return soldier_list
+
 def savedata(filename):
     with open(soldierdatafile, 'wb+') as output:
         pickle.dump(soldier_list, output, pickle.HIGHEST_PROTOCOL)

@@ -19,14 +19,6 @@ def savedata(filename):
         with open(soldierdatafile, 'wb') as output:
             pickle.dump(soldierList[i], output, pickle.HIGHEST_PROTOCOL)
 
-
-
-
-
-
-
-
-
 '''
 def set_runtime_score(runtime):
     runtime_score = run_groups_male[self.age_group][runtime]
@@ -74,8 +66,6 @@ print(runtime_score)
 '''
 
 import json
-
-
 class Soldier:
 
     def __init__(self, firstname, lastname):
