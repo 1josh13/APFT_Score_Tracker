@@ -76,18 +76,18 @@ def set_age_group(soldierage):
         return False
 
 def loaddata(filename):
-    with open(soldierdatafile, 'rb') as input:
-        print(input)
-        soldier_list = pickle.load(input)
-        return soldier_list
-    #except:
-        #print("No Data in file.")
+    try:
+        with open(soldierdatafile, 'rb') as input:
+            print(input)
+            soldier_list = pickle.load(input)
+            return soldier_list
+    except:
+        print("No Data in file.")
 def savedata(filename):
     with open(soldierdatafile, 'wb+') as output:
         pickle.dump(soldier_list, output, pickle.HIGHEST_PROTOCOL)
 
-soldier_list = loaddata(soldierdatafile)
-while main_loop:
+def print_main():
     print ('''
     Main Menu
     1) Edit Soldier Records
@@ -95,17 +95,90 @@ while main_loop:
     3) Add a Soldier
     0) Exit's Program and Saves Data
     ''')
+
+def print_select():
+    print('''
+    Selection Menu
+    1) Select Soldier
+    2) Edit Selected Soldier Information
+    3) View / Add / Edit APFT Scores
+    0) Return to Main Menu
+    ''')
+
+def print_edit():
+    print('''
+    1) Edit Soldier's Name.
+    2) Edit Soldier's Age.
+    3) Edit Soldier's Gender.
+    0) Return
+    ''')
+
+def print_edit_apft():
+    print('''
+    1) View APFT Scores
+    2) Add APFT Scores
+    3) Edit APFT Scores (Coming soon)
+    0) Return to Selection Menu
+    ''')
+
+def print_apft_list():
+    tmp.print_scorelist()
+    print('''
+    Pushups: {}
+    Situps: {}
+    2 Mile Run: {}
+
+    Total Score: {} out of 300
+    '''.format(tmp.get_pushup_score(), tmp.get_situp_score(), tmp.get_runtime_score(), tmp.get_pushup_score() + tmp.get_situp_score() + tmp.get_runtime_score()))
+
+def print_all_soldiers():
+    print("Showing all soldier data")
+    for i in soldier_list:
+        print(soldier_list.index(i), i.get_name(), i.gender, i.age)
+
+def add_soldier():
+    firstname = input("Enter Soldier's first name: ")
+    surname = input("Enter Soldier's last name: ")
+    soldierage = int(input("Enter Soldier's Age: "))
+    print("Select Soldier's Gender:")
+    print("1. Male")
+    print("2. Female")
+    soldiergenderstr = int(input("> "))
+    if soldiergenderstr == 1:
+        soldiergender = "Male"
+    elif soldiergenderstr == 2:
+        soldiergender = "Female"
+    else:
+        print("You dun fucked up")
+    soldier_age_group = set_age_group(soldierage)
+    soldier_list.append(Soldier(firstname, surname, soldierage, soldiergender, soldier_age_group))
+    print("Soldier, {} {}, age {} {} added to the database!".format(firstname, surname, soldierage, soldiergender))
+
+def add_new_apft():
+    date = input("Enter the date of the record to input: MMDDYYY")
+    pushup_reps = int(input("Enter number of pushups preformed: "))
+    situp_reps = int(input("Enter number of situps preformed: "))
+    runtime = input("Enter 2 mile runtime MM:SS: ")
+    min, sec = runtime.split(':')
+    run_secs = int(min) * 60 + int(sec)
+    tmp.set_scores(pushup_reps, situp_reps, run_secs, date)
+    print('''
+    Pushups: {}
+    Situps: {}
+    2 Mile Run: {}
+
+    Total Score: {} out of 300
+    '''.format(tmp.get_pushup_score(), tmp.get_situp_score(), tmp.get_runtime_score(),
+               tmp.get_pushup_score() + tmp.get_situp_score() + tmp.get_runtime_score()))
+
+soldier_list = loaddata(soldierdatafile)
+while main_loop:
+    print_main()
     main_choice = input("Enter Selection: ")
     if main_choice == "1":
         select_loop = True
         while select_loop:
-            print('''
-            Selection Menu
-            1) Select Soldier
-            2) Edit Selected Soldier Information
-            3) View / Add / Edit APFT Scores
-            0) Return to Main Menu
-            ''')
+            print_select()
             select_choice = input("Enter Selection: ")
             #Prints soldier list and asks for user choice.
             if select_choice == "1":
@@ -120,12 +193,7 @@ while main_loop:
             elif select_choice == "2":
                 edit_loop_main = True
                 while edit_loop_main:
-                    print('''
-                    1) Edit Soldier Name.
-                    2) Edit Soldier Age.
-                    3) Edit Solder Gender.
-                    0) Return
-                    ''')
+                    print_edit()
                     edit_choice_info = input("Enter Selection: ")
                     if edit_choice_info == "1":
                         new_firstname = input("Enter new first name: ")
@@ -149,38 +217,12 @@ while main_loop:
             elif select_choice == "3":
                 edit_loop_apft = True
                 while edit_loop_apft:
-                    print('''
-                    1) View APFT Scores
-                    2) Add APFT Scores
-                    3) Edit APFT Scores (Coming soon)
-                    0) Return to Selection Menu
-                    ''')
+                    print_edit_apft()
                     apft_loop_choice = input("Enter Selection: ")
-                    #TODO: Add DATE --- SCORE style printout.
                     if apft_loop_choice == "1":
-                        tmp.print_scorelist()
-                        print('''
-                        Pushups: {}
-                        Situps: {}
-                        2 Mile Run: {}
-                        
-                        Total Score: {} out of 300
-                        '''.format(tmp.get_pushup_score(), tmp.get_situp_score(), tmp.get_runtime_score(), tmp.get_pushup_score() + tmp.get_situp_score() + tmp.get_runtime_score()))
+                        print_apft_list()
                     elif apft_loop_choice == "2":
-                        date = input("Enter the date of the record to input: MMDDYYY")
-                        pushup_reps = int(input("Enter number of pushups preformed: "))
-                        situp_reps = int(input("Enter number of situps preformed: "))
-                        runtime = input("Enter 2 mile runtime MM:SS: ")
-                        min, sec = runtime.split(':')
-                        run_secs = int(min) * 60 + int(sec)
-                        tmp.set_scores(pushup_reps, situp_reps, run_secs, date)
-                        print('''
-                        Pushups: {}
-                        Situps: {}
-                        2 Mile Run: {}
-
-                        Total Score: {} out of 300
-                        '''.format(tmp.get_pushup_score(), tmp.get_situp_score(), tmp.get_runtime_score(), tmp.get_pushup_score() + tmp.get_situp_score() + tmp.get_runtime_score()))
+                        add_new_apft()
                     #TODO Edit apft scores.
                     #elif apft_loop_choice == "3":
 
@@ -196,27 +238,10 @@ while main_loop:
                 print("You've entered an incorrect option: {}!".format(select_choice))
     #Shows all soldier data.
     elif main_choice == "2":
-        print("Showing all soldier data")
-        for i in soldier_list:
-            print(soldier_list.index(i), i.get_name(), i.gender, i.age)
+        print_all_soldiers()
     #Imputs new soldier data into soldier class as an object of the class.
     elif main_choice == "3":
-        firstname = input("Enter Soldier's first name: ")
-        surname = input("Enter Soldier's last name: ")
-        soldierage = int(input("Enter Soldier's Age: "))
-        print("Select Soldier's Gender:")
-        print("1. Male")
-        print("2. Female")
-        soldiergenderstr = int(input("> "))
-        if soldiergenderstr == 1:
-            soldiergender = "Male"
-        elif soldiergenderstr == 2:
-            soldiergender = "Female"
-        else:
-            print("You dun fucked up")
-        soldier_age_group = set_age_group(soldierage)
-        soldier_list.append(Soldier(firstname, surname, soldierage, soldiergender, soldier_age_group))
-        print("Soldier, {} {}, age {} {} added to the database!".format(firstname, surname, soldierage, soldiergender))
+        add_soldier()
     #Exits the program.
     elif main_choice == "0":
         print("Goodbye!")
