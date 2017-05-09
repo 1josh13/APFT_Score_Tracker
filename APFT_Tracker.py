@@ -45,7 +45,7 @@ class Soldier:
                 runtime = runtime + 1
             self.runtime_score = run_groups_male[self.age_group][runtime]
             total_score = self.pushup_score + self.situp_score + self.runtime_score
-            self.scorelist.append((date, pushup_reps, self.pushup_score, situp_reps, self.situp_score, runtime, self.runtime_score, total_score))
+            self.scorelist.append([date, pushup_reps, self.pushup_score, situp_reps, self.situp_score, runtime, self.runtime_score, total_score])
         elif self.gender == "Female":
             if pushup_reps >= 51:
                 pushup_reps = 51
@@ -62,10 +62,66 @@ class Soldier:
                 runtime = runtime + 1
             self.runtime_score = run_groups_female[self.age_group][runtime]
             total_score = self.pushup_score + self.situp_score + self.runtime_score
-            self.scorelist.append((date, pushup_reps, self.pushup_score, situp_reps, self.situp_score, runtime,
-                                   self.runtime_score, total_score))
-        else:
+            self.scorelist.append([date, pushup_reps, self.pushup_score, situp_reps, self.situp_score, runtime, self.runtime_score, total_score])
+        else:                       #0          1               2           3               4           5           6                   7
             print("Fatle Error, Can not set scores!")
+    def edit_score_pushups(self, new_pushup_reps, listselect):
+        if self.gender == "Male":
+            if new_pushup_reps >= 77:
+                new_pushup_reps = 77
+            self.pushup_score = pushup_groups_male[self.age_group][new_pushup_reps]
+            self.scorelist[listselect][1] = new_pushup_reps
+            self.scorelist[listselect][2] = self.pushup_score
+            print("Pushups have been modified!")
+        elif self.gender == "Female":
+            if new_pushup_reps >= 51:
+                new_pushup_reps = 51
+            self.pushup_score = pushup_groups_female[self.age_group][new_pushup_reps]
+            self.scorelist[listselect][1] = new_pushup_reps
+            self.scorelist[listselect][2] = self.pushup_score
+            print("Pushups have been modified!")
+    def edit_score_situps(self, new_situp_reps, listselect):
+        if self.gender == "Male":
+            if new_situp_reps >= 82:
+                new_situp_reps = 82
+            self.pushup_score = situp_groups_unisex[self.age_group][new_situp_reps]
+            self.scorelist[listselect][3] = new_situp_reps
+            self.scorelist[listselect][4] = self.situp_score
+            print("Situps have been modified!")
+        elif self.gender == "Female":
+            if new_situp_reps >= 82:
+                new_situp_reps = 82
+            self.situp_score = situp_groups_unisex[self.age_group][new_situp_reps]
+            self.scorelist[listselect][3] = new_situp_reps
+            self.scorelist[listselect][4] = self.situp_score
+            print("Situps have been modified!")
+    def edit_score_run(self, new_run_time, listselect):
+        min, sec = new_run_time.split(':')
+        new_run_time = int(min) * 60 + int(sec)
+        if self.gender == "Male":
+            if new_run_time <= 780:
+                new_run_time = 780
+            keylist = []
+            for key in run_groups_male[self.age_group].keys():
+                keylist.append(key)
+            while keylist.count(new_run_time) == 0:
+                new_run_time = new_run_time + 1
+            self.runtime_score = run_groups_male[self.age_group][new_run_time]
+            self.scorelist[listselect][5] = new_run_time
+            self.scorelist[listselect][6] = self.runtime_score
+            print("Runtime has been modified!")
+        elif self.gender == "Female":
+            if new_run_time <= 930:
+                new_run_time = 930
+            keylist = []
+            for key in run_groups_female[self.age_group].keys():
+                keylist.append(key)
+            while keylist.count(new_run_time) == 0:
+                new_run_time = new_run_time + 1
+            self.pushup_score = run_groups_female[self.age_group][new_run_time]
+            self.scorelist[listselect][5] = new_run_time
+            self.scorelist[listselect][6] = self.runtime_score
+            print("Runtime has been modified!")
     def print_scorelist(self):
         for entry in self.scorelist: # scorelist = [(str, int), (str, int), (str, int)]
             print('''
@@ -201,6 +257,41 @@ def edit_name():
     tmp.lastname = new_lastname
     print("The soldiers name has been changed!")
 
+def edit_apft():
+    for entry in tmp.scorelist:  # scorelist = [(str, int), (str, int), (str, int)]
+        print('''
+            Record # {}
+            Record Date: {}
+            PU Reps: {} -- PU Score: {}
+            SU Reps: {} -- SU Score: {}
+            Runtime: {} -- Run Score: {}
+            Total Score: {}'''.format(tmp.scorelist.index(entry)+1, entry[0], entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], entry[7]))
+    edit_apft_listselect = int(input("Select the Record number to edit (-1 to quit): "))
+    if edit_apft_listselect == -1:
+        return
+    else:
+        edit_apft_listselect = edit_apft_listselect - 1
+        print('''
+        What score would you like to edit?
+        1) Pushups
+        2) Situps
+        3) Run
+        ''')
+        edit_apft_scoreselect = int(input("Enter Selection (-1 to quit): "))
+        if edit_apft_scoreselect == -1:
+            return
+        elif edit_apft_scoreselect == 1:
+            new_pushup_reps = int(input("Please enter the correct number of Pushup Repetitions that the soldier performed: "))
+            tmp.edit_score_pushups(new_pushup_reps, edit_apft_listselect)
+        elif edit_apft_scoreselect == 2:
+            new_situp_reps = int(input("Please enter the correct number of Situp Repetitions that the soldier performed: "))
+            tmp.edit_score_situps(new_situp_reps, edit_apft_listselect)
+        elif edit_apft_scoreselect == 3:
+            new_runtime = input("Please enter the correct runtime of the soldier MM:SS: ")
+            tmp.edit_score_run(new_runtime, edit_apft_listselect)
+        else:
+            print("You've entered an incorrect option!")
+
 soldier_list = loaddata(soldierdatafile)
 while main_loop:
     print_main()
@@ -241,7 +332,6 @@ while main_loop:
                         edit_loop_main = False
                     else:
                         print("You've entered an incorrect option {}!".format(edit_choice_info))
-            #TODO: Add ability to edit records.
             elif select_choice == "2":
                 edit_loop_apft = True
                 while edit_loop_apft:
@@ -251,9 +341,8 @@ while main_loop:
                         tmp.print_scorelist()
                     elif apft_loop_choice == "2":
                         add_new_apft()
-                    #TODO Edit apft scores.
-                    #elif apft_loop_choice == "3":
-
+                    elif apft_loop_choice == "3":
+                        edit_apft()
                     elif apft_loop_choice == "0":
                         print("Returning to Selection Menu!")
                         edit_loop_apft = False
