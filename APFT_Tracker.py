@@ -4,6 +4,7 @@ from metrics import pushup_groups_male
 from metrics import pushup_groups_female
 from metrics import situp_groups_unisex
 from metrics import run_groups_male
+from metrics import run_groups_female
 homepath = expanduser("~\\Documents\\")
 soldierdatafile = homepath+"soldierdata.txt"
 main_loop = True
@@ -29,6 +30,12 @@ class Soldier:
             self.lastname = lastname
     def set_scores(self, pushup_reps, situp_reps, runtime, date):
         if self.gender == "Male":
+            if pushup_reps >= 77:
+                pushup_reps = 77
+            if situp_reps >= 82:
+                situp_reps = 82
+            if runtime <= 780:
+                runtime = 780
             self.pushup_score = pushup_groups_male[self.age_group][pushup_reps]
             self.situp_score = situp_groups_unisex[self.age_group][situp_reps]
             keylist = []
@@ -40,15 +47,20 @@ class Soldier:
             total_score = self.pushup_score + self.situp_score + self.runtime_score
             self.scorelist.append((date, pushup_reps, self.pushup_score, situp_reps, self.situp_score, runtime, self.runtime_score, total_score))
         elif self.gender == "Female":
+            if pushup_reps >= 51:
+                pushup_reps = 51
+            if situp_reps >= 82:
+                situp_reps = 82
+            if runtime <= 930:
+                runtime = 930
             self.pushup_score = pushup_groups_female[self.age_group][pushup_reps]
             self.situp_score = situp_groups_unisex[self.age_group][situp_reps]
             keylist = []
-            for key in run_groups_male[self.age_group].keys():
+            for key in run_groups_female[self.age_group].keys():
                 keylist.append(key)
             while keylist.count(runtime) == 0:
                 runtime = runtime + 1
-            #TODO: import female run standards, for now using male runtimes.
-            self.runtime_score = run_groups_male[self.age_group][runtime]
+            self.runtime_score = run_groups_female[self.age_group][runtime]
             total_score = self.pushup_score + self.situp_score + self.runtime_score
             self.scorelist.append((date, pushup_reps, self.pushup_score, situp_reps, self.situp_score, runtime,
                                    self.runtime_score, total_score))
@@ -86,7 +98,6 @@ def set_age_group(soldierage):
 def loaddata(filename):
     try:
         with open(soldierdatafile, 'rb') as input:
-            print(input)
             soldier_list = pickle.load(input)
             return soldier_list
     except:
@@ -204,8 +215,11 @@ while main_loop:
                 print("You MUST select a soldier to edit before continuing!!!")
                 for i in soldier_list:
                     print(soldier_list.index(i), i.get_name(), i.gender, i.age)
-                soldier_select = int(input("Please enter your selection: "))
-                tmp = soldier_list[soldier_select]
+                soldier_select = int(input("Please enter your selection (Type -1 to quit):  "))
+                if soldier_select == -1:
+                    break
+                else:
+                    tmp = soldier_list[soldier_select]
             print_select()
             select_choice = input("Enter Selection: ")
             #Enter "edit" mode to change selected soldiers attributes.
