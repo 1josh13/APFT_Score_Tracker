@@ -80,6 +80,8 @@ class Soldier:
             self.scorelist[listselect][1] = new_pushup_reps
             self.scorelist[listselect][2] = self.pushup_score
             print("Pushups have been modified!")
+        total_score = self.pushup_score + self.situp_score + self.runtime_score
+        self.scorelist[listselect][7] = total_score
     def edit_score_situps(self, new_situp_reps, listselect):
         if self.gender == "Male":
             if new_situp_reps >= 82:
@@ -95,6 +97,8 @@ class Soldier:
             self.scorelist[listselect][3] = new_situp_reps
             self.scorelist[listselect][4] = self.situp_score
             print("Situps have been modified!")
+        total_score = self.pushup_score + self.situp_score + self.runtime_score
+        self.scorelist[listselect][7] = total_score
     def edit_score_run(self, new_run_time, listselect):
         min, sec = new_run_time.split(':')
         new_run_time = int(min) * 60 + int(sec)
@@ -122,6 +126,8 @@ class Soldier:
             self.scorelist[listselect][5] = new_run_time
             self.scorelist[listselect][6] = self.runtime_score
             print("Runtime has been modified!")
+        total_score = self.pushup_score + self.situp_score + self.runtime_score
+        self.scorelist[listselect][7] = total_score
     def print_scorelist(self):
         for entry in self.scorelist: # scorelist = [(str, int), (str, int), (str, int)]
             print('''
