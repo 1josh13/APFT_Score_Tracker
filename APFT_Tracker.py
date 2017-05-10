@@ -9,7 +9,6 @@ homepath = expanduser("~\\Documents\\")
 soldierdatafile = homepath+"soldierdata.txt"
 main_loop = True
 tmp = ""
-#TODO: Create load and save function in program.
 class Soldier:
     def __init__(self, firstname, lastname, age, gender, age_group):
         self.firstname = firstname
@@ -28,6 +27,7 @@ class Soldier:
             self.firstname = firstname
         if self.lastname != lastname:
             self.lastname = lastname
+    # Converts entered rep's and time to scores. Stores in scorelist for each soldier.
     def set_scores(self, pushup_reps, situp_reps, runtime, date):
         if self.gender == "Male":
             if pushup_reps >= 77:
@@ -64,7 +64,7 @@ class Soldier:
             total_score = self.pushup_score + self.situp_score + self.runtime_score
             self.scorelist.append([date, pushup_reps, self.pushup_score, situp_reps, self.situp_score, runtime, self.runtime_score, total_score])
         else:                       #0          1               2           3               4           5           6                   7
-            print("Fatle Error, Can not set scores!")
+            print("Fatal Error, Can not set scores!")
     def edit_score_pushups(self, new_pushup_reps, listselect):
         if self.gender == "Male":
             if new_pushup_reps >= 77:
@@ -131,6 +131,7 @@ class Soldier:
                 Runtime: {} -- Run Score: {}
                 Total Score: {}'''.format(entry[0], entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], entry[7]))
 
+# Sets soldier age group based on inputted age.
 def set_age_group(soldierage):
     if soldierage <= 21:
         return 21
@@ -151,6 +152,7 @@ def set_age_group(soldierage):
     else:
         return False
 
+# Loads saved data, if no data in file, returns an empty list.
 def loaddata(filename):
     try:
         with open(soldierdatafile, 'rb') as input:
@@ -203,6 +205,7 @@ def print_all_soldiers():
     for i in soldier_list:
         print(soldier_list.index(i), i.get_name(), i.gender, i.age)
 
+# Creates a new soldier object and appends to soldier_list.
 def add_soldier():
     firstname = input("Enter Soldier's first name: ")
     surname = input("Enter Soldier's last name: ")
@@ -221,6 +224,7 @@ def add_soldier():
     soldier_list.append(Soldier(firstname, surname, soldierage, soldiergender, soldier_age_group))
     print("Soldier, {} {}, age {} {} added to the database!".format(firstname, surname, soldierage, soldiergender))
 
+# Adds new APFT record to selected soldier.
 def add_new_apft():
     date = input("Enter the date of the record to input: MMDDYYY")
     pushup_reps = int(input("Enter number of pushups preformed: "))
@@ -238,6 +242,7 @@ def add_new_apft():
     '''.format(tmp.pushup_score, tmp.situp_score, tmp.runtime_score,
                tmp.pushup_score + tmp.situp_score + tmp.runtime_score))
 
+# Edit's soldier gender.
 def edit_gender():
     print("Select new gender:")
     print("1. Male")
@@ -247,9 +252,12 @@ def edit_gender():
         soldiergender = "Male"
     elif soldiergenderstr == 2:
         soldiergender = "Female"
+    else:
+        print("You've entered an incorrect choice! {}".format(soldiergenderstr))
     tmp.gender = soldiergender
     print("The soldiers gender has been changed!")
 
+# Edits soldier name.
 def edit_name():
     new_firstname = input("Enter new first name: ")
     new_lastname = input("Enter new last name: ")
@@ -257,6 +265,7 @@ def edit_name():
     tmp.lastname = new_lastname
     print("The soldiers name has been changed!")
 
+# Edits apft record entires in selected soldier records.
 def edit_apft():
     for entry in tmp.scorelist:  # scorelist = [(str, int), (str, int), (str, int)]
         print('''
@@ -292,28 +301,44 @@ def edit_apft():
         else:
             print("You've entered an incorrect option!")
 
+# Edits soldier age.
+def edit_age():
+    new_age = int(input("Enter soldiers new age: "))
+    tmp.age = new_age
+    print("The soldiers age has been changed!")
+
+def force_soldier_select():
+    global tmp
+    if not soldier_list:
+        print("There are no soldier records to display!")
+    else:
+        print("You MUST select a soldier to edit before continuing!!!")
+        print_all_soldiers()
+        soldier_select = int(input("Please enter your selection (Type -1 to quit):  "))
+        if soldier_select == -1:
+            select_loop = False
+            return select_loop
+        elif soldier_select <= len(soldier_list):
+            tmp = soldier_list[soldier_select]
+            return tmp
+        else:
+            print("It appears you've entered an incorrect selection.")
+
+# Calls function to load saved data.
 soldier_list = loaddata(soldierdatafile)
+# Start of main function
 while main_loop:
     print_main()
     main_choice = input("Enter Selection: ")
     if main_choice == "1":
         select_loop = True
         while select_loop:
-            #Prints soldier list and asks for user choice.
-            if not soldier_list:
-                print("There are no soldier records to display!")
-            else:
-                print("You MUST select a soldier to edit before continuing!!!")
-                for i in soldier_list:
-                    print(soldier_list.index(i), i.get_name(), i.gender, i.age)
-                soldier_select = int(input("Please enter your selection (Type -1 to quit):  "))
-                if soldier_select == -1:
-                    break
-                else:
-                    tmp = soldier_list[soldier_select]
+            # Prints soldier list and asks for user choice.
+            if not force_soldier_select():
+                break
             print_select()
             select_choice = input("Enter Selection: ")
-            #Enter "edit" mode to change selected soldiers attributes.
+            # Enter "edit" mode to change selected soldiers attributes.
             if select_choice == "1":
                 edit_loop_main = True
                 while edit_loop_main:
@@ -322,9 +347,7 @@ while main_loop:
                     if edit_choice_info == "1":
                         edit_name()
                     elif edit_choice_info == "2":
-                        new_age = int(input("Enter new age: "))
-                        tmp.age = new_age
-                        print("The soldiers age has been changed!")
+                        edit_age()
                     elif edit_choice_info == "3":
                         edit_gender()
                     elif edit_choice_info == "0":
